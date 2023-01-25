@@ -1,0 +1,7 @@
+pymongo
+motor
+bcrypt
+pydantic
+httpx
+hurry.filesize
+python-dotenv
