@@ -4,7 +4,7 @@ for querying MongoDB
 """
 import datetime
 from typing import List
-from mir_persistence_layer_utils.dbs.mongodb_session import MongoDBSession
+from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 
 
 class CreateEntityBaseCRUDAPI(object):

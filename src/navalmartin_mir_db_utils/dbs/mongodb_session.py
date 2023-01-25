@@ -6,7 +6,7 @@ import os
 import motor.motor_asyncio
 from typing import Union
 
-from mir_persistence_layer_utils.dbs.dbs_utils import DB_ERROR
+from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
 
 
 class MongoDBSession(object):
