@@ -3,7 +3,7 @@ requires = ["hatchling", "pymongo", "motor"]
 build-backend = "hatchling.build"
 [project]
 name = "navalmartin_mir_db_utils"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Alexandros Giavaras", email="a.giavaras@gmail.com" },
 ]
