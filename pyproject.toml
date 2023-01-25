@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling", "pymongo", "motor"]
+build-backend = "hatchling.build"
+[project]
+name = "navalmartin_mir_db_utils"
+version = "0.0.1"
+authors = [
+  { name="Alexandros Giavaras", email="a.giavaras@gmail.com" },
+]
+description = "Persistence layer utilities for mir project"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+[project.urls]
+"Homepage" = "https://github.com/Navalmartin/mir_persistence_layer_utils"
+"Bug Tracker" = "https://github.com/Navalmartin/mir_persistence_layer_utils/issues"
