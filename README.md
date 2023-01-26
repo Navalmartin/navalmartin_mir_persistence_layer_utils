@@ -52,7 +52,7 @@ session = MongoDBSession(db_name="my-db-name")
 
 You can use the session to execute simple queries as shown below
 
-```commandline
+```
 import asyncio
 import bson
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 You can also run transactions.
 
-```commandline
+```
 from typing import Any
 import bson
 from pymongo.read_concern import ReadConcern
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
 There is also a decorator available to run a transaction
 
-```commandline
+```
 from typing import Any
 import bson
 from pymongo.read_concern import ReadConcern
