@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Callable
+from typing import Callable, Any
 from pymongo.read_concern import ReadConcern
 from pymongo.write_concern import WriteConcern
 from pymongo.read_preferences import ReadPreference
@@ -7,16 +7,35 @@ from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR, DB_INFO
 
 
-def with_async_transaction(mdb_session: MongoDBSession,
-                           async_callback: Callable,
-                           callback_args: dict,
-                           max_commit_time_ms: int,
-                           read_concern: ReadConcern, write_concern: WriteConcern,
-                           read_preference: ReadPreference,
-                           with_log: bool=False,
-                           with_transaction_result: bool = None,
-                           transaction_result_handler: Callable=None):
+def with_transaction(fn: Callable) -> Any:
+    """Simple decorator to mark the callable
+    as executing a transaction
 
+    Parameters
+    ----------
+    fn: The callable to wrap
+
+    Returns
+    -------
+
+    """
+    @wraps(fn)
+    async def wrapper(*args, **kwargs):
+        func_result = await fn(*args, **kwargs)
+        return func_result
+
+    return wrapper
+
+
+def use_async_transaction(mdb_session: MongoDBSession,
+                          async_callback: Callable,
+                          callback_args: dict,
+                          max_commit_time_ms: int,
+                          read_concern: ReadConcern, write_concern: WriteConcern,
+                          read_preference: ReadPreference,
+                          with_log: bool = False,
+                          with_transaction_result: bool = None,
+                          transaction_result_handler: Callable = None) -> Any:
     """Decorator to wrap the given callable into a MongoDB transaction
     The callback function implements the actual read/write operations.
     This is similar to with_transaction but assumes async ops
@@ -76,5 +95,7 @@ def with_async_transaction(mdb_session: MongoDBSession,
 
             func_result = await async_fn(*args, **kwargs)
             return func_result
+
         return wrapper
+
     return _execute_func
