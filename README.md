@@ -11,13 +11,13 @@ Utilities for the persistence layer when working with the _mir_ project
 - httpx
 - hurry.filesize
 - python-dotenv
-- 
+
 ## Installation
 
 Installing the utilities via ```pip```
 
 ```
-pip install -i https://test.pypi.org/simple/ navalmartin-mir-db-utils==0.0.3
+pip install -i https://test.pypi.org/simple/ navalmartin-mir-db-utils==0.0.4
 ```
 
 Notice that the project is pulled from ```TestPyPi``` which does not have the same packages
