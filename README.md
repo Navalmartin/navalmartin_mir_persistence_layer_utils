@@ -99,6 +99,7 @@ import asyncio
 
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.transanctions import run_transaction
+from navalmartin_mir_db_utils.transanctions.decorators import with_transaction
 
 IMAGES_COLLECTION_TO_READ = "YOUR_COLLECTION_NAME"
 MONGODB_URL = "YOUR_MONGODB_URL"
@@ -125,24 +126,28 @@ async def read_images_callback(session: Any, kwargs: dict):
 async def transaction_result_handler(transaction_result: Any):
     images = [img async for img in transaction_result]
     return images
+    
+@with_transaction
+async def execute_function(mir_db_session: MongoDBSession):
+    return await run_transaction(mdb_session=mir_db_session,
+                                 async_callback=read_images_callback,
+                                 callback_args=callback_args,
+                                 max_commit_time_ms=None,
+                                 read_concern=read_concern,
+                                 write_concern=wc_majority,
+                                 read_preference=ReadPreference.PRIMARY,
+                                 with_log=True,
+                                 transaction_result_handler=transaction_result_handler)
 
 
 if __name__ == '__main__':
-    mir_db_session_from = MongoDBSession(mongodb_url=MONGODB_URL,
-                                         db_name=MONGO_DB_NAME_FROM)
+    mir_db_session = MongoDBSession(mongodb_url=MONGODB_URL,
+                                    db_name=MONGO_DB_NAME_FROM)
 
     callback_args = {'db_name': 'mir_db',
                      'survey_idx': '63ad64252c853ee163fc6a63',
                      'projection': {'original_filename': 1}}
-    transaction_result = asyncio.run(run_transaction(mdb_session=mir_db_session_from,
-                                                     async_callback=read_images_callback,
-                                                     callback_args=callback_args,
-                                                     max_commit_time_ms=None,
-                                                     read_concern=read_concern,
-                                                     write_concern=wc_majority,
-                                                     read_preference=ReadPreference.PRIMARY,
-                                                     with_log=True,
-                                                     transaction_result_handler=transaction_result_handler))
+    transaction_result = asyncio.run(execute_function(mdb_session=mir_db_session))
     print(transaction_result)
 
 ```
@@ -158,7 +163,7 @@ from pymongo.read_preferences import ReadPreference
 import asyncio
 
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
-from navalmartin_mir_db_utils.transanctions.decorators import with_async_transaction
+from navalmartin_mir_db_utils.transanctions.decorators import use_async_transaction
 
 IMAGES_COLLECTION_TO_READ = 'YOUR_COLLECTION_NAME'
 MONGODB_URL = "YOUR_MONGODB_URL"
@@ -191,7 +196,7 @@ async def transaction_result_handler(transaction_result: Any):
     return images
 
 
-@with_async_transaction(async_callback=read_images_callback,
+@use_async_transaction(async_callback=read_images_callback,
                         callback_args=callback_args,
                         mdb_session=MongoDBSession(mongodb_url=MONGODB_URL, db_name=MONGO_DB_NAME_FROM),
                         write_concern=wc_majority,
