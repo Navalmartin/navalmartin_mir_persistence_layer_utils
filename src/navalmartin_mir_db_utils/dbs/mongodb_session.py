@@ -46,3 +46,9 @@ def get_db_session() -> MongoDBSession:
     return MongoDBSession()
 
 
+def get_db_session_with_config(config: dict) -> MongoDBSession:
+    mongodb_url = config['MONGODB_URL']
+    db_name = config['MONGODB_NAME']
+    return MongoDBSession(mongodb_url=mongodb_url, db_name=db_name)
+
+
