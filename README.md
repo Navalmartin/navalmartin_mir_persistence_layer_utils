@@ -17,7 +17,7 @@ Utilities for the persistence layer when working with the _mir_ project
 Installing the utilities via ```pip```
 
 ```
-pip install -i https://test.pypi.org/simple/ navalmartin-mir-db-utils==0.0.5
+pip install -i https://test.pypi.org/simple/ navalmartin-mir-db-utils==0.0.6
 ```
 
 Notice that the project is pulled from ```TestPyPi``` which does not have the same packages
