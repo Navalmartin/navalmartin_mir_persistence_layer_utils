@@ -17,7 +17,7 @@ Utilities for the persistence layer when working with the _mir_ project
 Installing the utilities via ```pip```
 
 ```
-pip install -i https://test.pypi.org/simple/ navalmartin-mir-db-utils==0.0.6
+pip install navalmartin-mir-db-utils==0.0.6
 ```
 
 Notice that the project is pulled from ```TestPyPi``` which does not have the same packages
@@ -27,7 +27,7 @@ to manually install the dependencies mentioned above.
 You can uninstall the project via
 
 ```commandline
-pip3 uninstall navalmartin_mir_db_utils
+pip uninstall navalmartin_mir_db_utils
 ```
 
 ## How to use
@@ -56,7 +56,7 @@ You can use the session to execute simple queries as shown below
 import asyncio
 import bson
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
-from navalmartin_mir_db_utils.crud.mongodb_crud_utils import ReadEntityBaseCRUDAPI
+from navalmartin_mir_db_utils.crud.mongodb_crud_utils import ReadEntityCRUDAPI
 
 IMAGES_COLLECTION_TO_READ="YOUR_COLLECTION_NAME"
 
@@ -64,7 +64,7 @@ IMAGES_COLLECTION_TO_READ="YOUR_COLLECTION_NAME"
 async def query_db(mongodb_session: MongoDBSession, criteria: dict,
                    projection: dict,
                    collection_name: str):
-    query_result = ReadEntityBaseCRUDAPI.do_find(criteria=criteria, projection=projection,
+    query_result = ReadEntityCRUDAPI.do_find(criteria=criteria, projection=projection,
                                                  db_session=mongodb_session,
                                                  collection_name=collection_name)
     images = [img async for img in query_result]
