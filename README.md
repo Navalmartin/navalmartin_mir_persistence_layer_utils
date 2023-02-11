@@ -17,12 +17,14 @@ Utilities for the persistence layer when working with the _mir_ project
 Installing the utilities via ```pip```
 
 ```
-pip install navalmartin-mir-db-utils==0.0.6
+pip install navalmartin-mir-db-utils
 ```
 
-Notice that the project is pulled from ```TestPyPi``` which does not have the same packages
-as the official PyPi index. This means that dependencies may fail to install. It is advised therefore
-to manually install the dependencies mentioned above.
+For a specific version you can use
+
+```
+pip install navalmartin-mir-db-utils==x.x.x
+```
 
 You can uninstall the project via
 
