@@ -3,13 +3,16 @@ requires = ["hatchling", "pymongo", "motor"]
 build-backend = "hatchling.build"
 [project]
 name = "navalmartin_mir_db_utils"
-version = "0.0.7"
+version = "0.0.8"
 authors = [
   { name="Alexandros Giavaras", email="a.giavaras@gmail.com" },
 ]
+maintainers = [
+  { name="Alexandros Giavaras", email="a.giavaras@gmail.com" }
+]
 description = "Persistence layer utilities for mir project"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
