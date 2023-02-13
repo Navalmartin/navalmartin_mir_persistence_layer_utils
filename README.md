@@ -1,6 +1,7 @@
 # mir-persistence-layer-utils
 
-Utilities for the persistence layer when working with the _mir_ project
+Utilities for the persistence layer when working with the _mir_ project. The official
+PyPi package can be found <a href="https://pypi.org/project/navalmartin-mir-db-utils/">here</a>.
 
 ## Dependencies
 
