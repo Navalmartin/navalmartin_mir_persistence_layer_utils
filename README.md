@@ -12,6 +12,7 @@ PyPi package can be found <a href="https://pypi.org/project/navalmartin-mir-db-u
 - httpx
 - hurry.filesize
 - python-dotenv
+- psutil
 
 ## Installation
 
@@ -30,7 +31,7 @@ pip install navalmartin-mir-db-utils==x.x.x
 You can uninstall the project via
 
 ```commandline
-pip uninstall navalmartin_mir_db_utils
+pip uninstall navalmartin-mir-db-utils
 ```
 
 ## How to use
