@@ -2,6 +2,7 @@ pymongo
 motor
 bcrypt
 pydantic
+pydantic[email]
 httpx
 hurry.filesize
 python-dotenv
