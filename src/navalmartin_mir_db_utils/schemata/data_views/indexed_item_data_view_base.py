@@ -18,8 +18,8 @@ class IndexedItemDataViewBase(BaseModel):
 
     @staticmethod
     def build_from_mongodb_json(
-        mdb_json: dict
-    ) -> dict:
+            mdb_json: dict
+    ) -> "IndexedItemDataViewBase":
         """Build the user data from the specified MongoDB document
 
         Parameters
@@ -30,15 +30,9 @@ class IndexedItemDataViewBase(BaseModel):
         -------
 
         """
-        
-        return stringify_dictionary(
-            data=mdb_json,
-            names=["idx"],
-        )
-    
-    @staticmethod
-    def build(mdb_json: dict) -> "IndexedItemDataViewBase":
-        data = IndexedItemDataViewBase.build_from_mongodb_json(mdb_json=mdb_json)
-        return IndexedItemDataViewBase(**data)
 
+        data = stringify_dictionary(data=mdb_json,
+                                    names=["_id", "created_at", "updated_at"],
+                                    )
+        return IndexedItemDataViewBase(**data)
 
