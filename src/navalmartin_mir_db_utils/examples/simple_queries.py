@@ -1,15 +1,13 @@
 import asyncio
 import bson
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
-from navalmartin_mir_db_utils.crud.mongodb_crud_utils import ReadEntityCRUDAPI
+from navalmartin_mir_db_utils.crud.mongodb_crud_ops import ReadEntityCRUDAPI
 from navalmartin_mir_db_utils.utils.exceptions import ResourceNotFoundException
 from navalmartin_mir_db_utils.crud.crud_utils import get_one_result_or_raise
 
-COLLECTION_NAME = "surveys"
+COLLECTION_NAME = "YOUR_COLLECTION_NAME"
 MONGODB_URL = "YOUR_MONGODB_URL"
-MONGODB_URL = "mongodb+srv://AlexNavalmartinAdmin:da13div08pao@cluster0.dnmjnvu.mongodb.net/?retryWrites=true&w=majority"
 MONGO_DB_NAME_FROM = "YOUR_MONGODB_NAME"
-MONGO_DB_NAME_FROM = "mir_db"
 
 
 async def query_db(mongodb_session: MongoDBSession, criteria: dict,
@@ -67,30 +65,6 @@ def main():
 
     asyncio.run(run_examples(mir_db_session_from=mir_db_session_from))
 
-    '''
-    result = asyncio.run(query_db(mongodb_session=mir_db_session_from,
-                                  criteria={'survey_idx': bson.ObjectId('63ad64252c853ee163fc6a63')},
-                                  projection={'original_filename': 1},
-                                  collection_name=IMAGES_COLLECTION_TO_READ))
-    print(result)
-    '''
-
-    '''
-    # count how many images the survey has
-    n_docs = asyncio.run(count_docs(mongodb_session=mir_db_session_from,
-                                    criteria={},
-                                    collection_name=COLLECTION_NAME))
-    print(n_docs)
-
-    try:
-        result = asyncio.run(query_db(mongodb_session=mir_db_session_from,
-                                      criteria={'survey_idx': bson.ObjectId('63ad64252c853ee163fc6a63')},
-                                      projection={'original_filename': 1},
-                                      collection_name=COLLECTION_NAME))
-    except ResourceNotFoundException as e:
-        print(str(e))
-    '''
-
-
+    
 if __name__ == '__main__':
     main()

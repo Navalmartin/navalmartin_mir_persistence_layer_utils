@@ -1,6 +1,6 @@
 from typing import Any, List
 import psutil
-from navalmartin_mir_db_utils.crud.mongodb_crud_utils import (CreateEntityCRUDAPI, UpdateEntityCRUDAPI)
+from navalmartin_mir_db_utils.crud.mongodb_crud_ops import (CreateEntityCRUDAPI, UpdateEntityCRUDAPI)
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.utils.db_enums import TaskStateTypeEnum
 from navalmartin_mir_db_utils.dbs.dbs_utils import is_valid_object_id

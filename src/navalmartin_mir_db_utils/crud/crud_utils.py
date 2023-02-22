@@ -1,6 +1,6 @@
 from typing import Any
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
-from navalmartin_mir_db_utils.crud.mongodb_crud_utils import ReadEntityCRUDAPI
+from navalmartin_mir_db_utils.crud.mongodb_crud_ops import ReadEntityCRUDAPI
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.utils.exceptions import (ResourceNotFoundException, ResourceNotUpdatedException, ResourceExistsException)
 
