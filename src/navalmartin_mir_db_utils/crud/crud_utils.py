@@ -34,7 +34,8 @@ async def if_resource_found_raise(crud_handler,
                                   error_message: str = "Error occurred"):
 
     result = await crud_handler.find_one(
-        criteria=criteria, db_session=db_session, projection={'_id': True}
+        criteria=criteria, db_session=db_session, projection={'_id': 1},
+        collection_name=crud_handler.collection_name
     )
 
     if result is not None:
@@ -50,7 +51,8 @@ async def update_one_or_raise(
         error_message: str = "Error occurred",
 ):
     result = await crud_handler.update_one(
-        criteria=criteria, db_session=db_session, update_data=update_data
+        criteria=criteria, db_session=db_session, update_data=update_data,
+        collection_name=crud_handler.collection_name
     )
 
     if result is None:
