@@ -36,3 +36,10 @@ class DBInsertFailedException(Exception):
     def __str__(self) -> str:
         return self.message
 
+class DBUpdateFailedException(Exception):
+    def __init__(self, collection_name: str):
+        self.message = f"Update operation failed for collection {collection_name}"
+
+    def __str__(self) -> str:
+        return self.message
+
