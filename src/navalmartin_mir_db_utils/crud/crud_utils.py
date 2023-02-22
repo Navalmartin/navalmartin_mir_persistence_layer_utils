@@ -1,11 +1,12 @@
 from typing import Any
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
+from navalmartin_mir_db_utils.crud.mongodb_crud_utils import ReadEntityCRUDAPI
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.utils.exceptions import (ResourceNotFoundException, ResourceNotUpdatedException, ResourceExistsException)
 
 
 async def get_one_result_or_raise(
-        crud_handler,
+        crud_handler: ReadEntityCRUDAPI,
         criteria: dict,
         db_session: MongoDBSession,
         projection: dict = {},
@@ -16,12 +17,13 @@ async def get_one_result_or_raise(
     result
     """
     result = await crud_handler.find_one(
-        criteria=criteria, db_session=db_session, projection=projection
+        criteria=criteria, db_session=db_session, projection=projection,
+        collection_name=crud_handler.collection_name
     )
 
     if result is None:
         print(f"{DB_ERROR} {error_message}")
-        raise ResourceNotFoundException()
+        raise ResourceNotFoundException(search_criteria=str(criteria))
 
     return result
 

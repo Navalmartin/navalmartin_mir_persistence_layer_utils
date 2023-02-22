@@ -7,8 +7,8 @@ class InvalidObjectIdException(Exception):
 
 
 class ResourceNotFoundException(Exception):
-    def __init__(self, resource_id: str):
-        self.message = f"Resource with id {resource_id} not found"
+    def __init__(self, search_criteria: str):
+        self.message = f"Resource with search_criteria {search_criteria} not found"
 
     def __str__(self) -> str:
         return self.message

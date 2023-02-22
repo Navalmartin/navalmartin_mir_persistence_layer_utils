@@ -4,7 +4,9 @@ for querying MongoDB
 """
 import datetime
 from typing import List
+from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
+from navalmartin_mir_db_utils.utils.exceptions import ResourceNotFoundException
 
 
 class CreateEntityCRUDAPI(object):
@@ -13,14 +15,14 @@ class CreateEntityCRUDAPI(object):
     """
 
     @staticmethod
-    def do_insert_one(data: dict, db_session: MongoDBSession, collection_name: str):
+    def insert_one(data: dict, db_session: MongoDBSession, collection_name: str):
         data['created_at'] = datetime.datetime.utcnow()
         data['updated_at'] = datetime.datetime.utcnow()
         result = db_session.db[collection_name].insert_one(data)
         return result
 
     @staticmethod
-    def do_insert_many(data: List[dict], db_session: MongoDBSession, collection_name: str):
+    def insert_many(data: List[dict], db_session: MongoDBSession, collection_name: str):
         for item in data:
             item['created_at'] = datetime.datetime.utcnow()
             item['updated_at'] = datetime.datetime.utcnow()
@@ -33,16 +35,25 @@ class ReadEntityCRUDAPI(object):
 
     """
 
+    def __init__(self, collection_name: str):
+        self._collection_name = collection_name
+
+    @property
+    def collection_name(self) -> str:
+        if self._collection_name is None or self._collection_name == "":
+            raise ValueError("Collection name is not set")
+        return self._collection_name
+
     @staticmethod
-    def do_find(criteria: dict, db_session: MongoDBSession,
-                projection: dict,
-                collection_name: str):
+    def find(criteria: dict, db_session: MongoDBSession,
+             projection: dict,
+             collection_name: str):
         result = db_session.db[collection_name].find(criteria, projection=projection)
         return result
 
     @staticmethod
-    def do_find_one(criteria: dict, db_session: MongoDBSession,
-                    projection: dict, collection_name: str):
+    def find_one(criteria: dict, db_session: MongoDBSession,
+                 projection: dict, collection_name: str):
         result = db_session.db[collection_name].find_one(criteria, projection=projection)
         return result
 
@@ -59,17 +70,17 @@ class UpdateEntityCRUDAPI(object):
     """
 
     @staticmethod
-    def do_update_one(criteria: dict, update_data: dict,
-                      db_session: MongoDBSession,
-                      collection_name: str,
-                      upsert: bool = False):
+    def update_one(criteria: dict, update_data: dict,
+                   db_session: MongoDBSession,
+                   collection_name: str,
+                   upsert: bool = False):
         update_data['updated_at'] = datetime.datetime.utcnow()
         result = db_session.db[collection_name].update_one(criteria, {"$set": update_data},
                                                            upsert=upsert)
         return result
 
     @staticmethod
-    def do_update(criteria: dict, update_data: dict,
+    def update_many(criteria: dict, update_data: dict,
                   db_session: MongoDBSession, collection_name: str,
                   upsert: bool = False):
         result = db_session.db[collection_name].update_many(criteria,
@@ -88,11 +99,11 @@ class DeleteEntityCRUDAPI(object):
     """
 
     @staticmethod
-    def do_delete_one(criteria: dict, db_session: MongoDBSession,
-                      collection_name: str):
+    def delete_one(criteria: dict, db_session: MongoDBSession,
+                   collection_name: str):
         result = db_session.db[collection_name].delete_one(criteria)
         return result
 
     @staticmethod
-    def do_delete(criteria: dict, db_session: MongoDBSession, collection_name: str):
+    def delete_many(criteria: dict, db_session: MongoDBSession, collection_name: str):
         return db_session.db[collection_name].delete_many(criteria)
