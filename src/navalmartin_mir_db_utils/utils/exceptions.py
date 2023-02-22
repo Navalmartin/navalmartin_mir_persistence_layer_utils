@@ -29,3 +29,10 @@ class ResourceExistsException(Exception):
     def __str__(self) -> str:
         return self.message
 
+class DBInsertFailedException(Exception):
+    def __init__(self, collection_name: str):
+        self.message = f"Insert operation failed for collection {collection_name}"
+
+    def __str__(self) -> str:
+        return self.message
+
