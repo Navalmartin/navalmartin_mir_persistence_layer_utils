@@ -1,7 +1,7 @@
 import bson
 from navalmartin_mir_db_utils.utils.exceptions import InvalidObjectIdException
 
-INVALID_BSON_ID = bson.ObjectId()
+INVALID_BSON_ID = "INVALID_BSON_OBJ_ID"
 
 DB_INFO = "DB_INFO: "
 DB_WARNING = "DB_WARNING: "
