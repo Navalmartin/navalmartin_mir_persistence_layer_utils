@@ -45,7 +45,7 @@ class CreateEntityCRUDAPI(CrudEntityBase):
         return db_session.db[collection_name].insert_many(data)
 
 
-class ReadEntityCRUDAPI(object):
+class ReadEntityCRUDAPI(CrudEntityBase):
     """Read queries in the DB
 
     """
@@ -73,7 +73,7 @@ class ReadEntityCRUDAPI(object):
         return result
 
 
-class UpdateEntityCRUDAPI(object):
+class UpdateEntityCRUDAPI(CrudEntityBase):
     """Update queries in the DB
 
     """
@@ -105,7 +105,7 @@ class UpdateEntityCRUDAPI(object):
                                                           upsert=upsert)
 
 
-class DeleteEntityCRUDAPI(object):
+class DeleteEntityCRUDAPI(CrudEntityBase):
     """Delete queries in the DB
 
     """

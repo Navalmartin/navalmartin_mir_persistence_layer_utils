@@ -1,8 +1,11 @@
-from typing import Any
+from typing import Any, Callable
+from pymongo.results import InsertOneResult, UpdateResult
+
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
-from navalmartin_mir_db_utils.crud.mongodb_crud_ops import ReadEntityCRUDAPI
+from navalmartin_mir_db_utils.crud.mongodb_crud_ops import ReadEntityCRUDAPI, CreateEntityCRUDAPI
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
-from navalmartin_mir_db_utils.utils.exceptions import (ResourceNotFoundException, ResourceNotUpdatedException, ResourceExistsException)
+from navalmartin_mir_db_utils.utils.exceptions import (ResourceNotFoundException, ResourceNotUpdatedException,
+                                                       ResourceExistsException, DBInsertFailedException)
 
 
 async def get_one_result_or_raise(
@@ -11,7 +14,7 @@ async def get_one_result_or_raise(
         db_session: MongoDBSession,
         projection: dict = {},
         error_message: str = "Error occurred"
-):
+) -> Any:
     """Query the handler about a result and raise
     ResourceNotFoundException if the query does not return any
     result
@@ -28,11 +31,52 @@ async def get_one_result_or_raise(
     return result
 
 
+async def insert_one_or_fail(crud_handler: CreateEntityCRUDAPI,
+                             insert_data: dict,
+                             db_session: MongoDBSession,
+                             error_message: str = "Error occurred",
+                             schema: Callable = None) -> InsertOneResult:
+    """
+
+    Parameters
+    ----------
+    crud_handler: The handler that does the insert
+    insert_data: The data to insert
+    db_session: The session used
+    error_message: The error message to show
+    schema: The schema to validate the data
+    Returns
+    -------
+
+    An instance of InsertOneResult
+    """
+
+    if schema is not None:
+        try:
+            schema(**insert_data)
+        except Exception as e:
+            print(f"{DB_ERROR} Schema validation failed on insert")
+            raise DBInsertFailedException(collection_name=crud_handler.collection_name)
+
+    result: InsertOneResult = await crud_handler.insert_one(data=insert_data,
+                                                            db_session=db_session,
+                                                            collection_name=crud_handler.collection_name)
+
+    if result is None:
+        print(f"{DB_ERROR} {error_message}")
+        raise DBInsertFailedException(collection_name=crud_handler.collection_name)
+
+    if not result.acknowledged:
+        print(f"{DB_ERROR} {error_message}")
+        raise DBInsertFailedException(collection_name=crud_handler.collection_name)
+
+    return result
+
+
 async def if_resource_found_raise(crud_handler,
                                   criteria: dict,
                                   db_session: MongoDBSession,
                                   error_message: str = "Error occurred"):
-
     result = await crud_handler.find_one(
         criteria=criteria, db_session=db_session, projection={'_id': 1},
         collection_name=crud_handler.collection_name
@@ -49,8 +93,8 @@ async def update_one_or_raise(
         db_session,
         update_data: dict,
         error_message: str = "Error occurred",
-):
-    result = await crud_handler.update_one(
+) -> UpdateResult:
+    result: UpdateResult = await crud_handler.update_one(
         criteria=criteria, db_session=db_session, update_data=update_data,
         collection_name=crud_handler.collection_name
     )
