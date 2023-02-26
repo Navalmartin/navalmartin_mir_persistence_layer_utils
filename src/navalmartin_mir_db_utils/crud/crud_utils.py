@@ -59,6 +59,10 @@ async def update_one_or_raise(
         print(f"{DB_ERROR} {error_message}")
         raise ResourceNotUpdatedException(resource_id=str(criteria))
 
+    if not result.acknowledged:
+        print(f"{DB_ERROR} {error_message}")
+        raise ResourceNotUpdatedException(resource_id=str(criteria))
+
     if result.modified_count != 1:
         print(f"{DB_ERROR} {error_message}")
         raise ResourceNotUpdatedException(resource_id=str(criteria))
