@@ -58,6 +58,8 @@ class InvalidAttributeValueException(Exception):
             self.message = f"Attribute {attribute_name} has value {attribute_value} not in range [{range[0]}, {range[1]}]"
         else:
             self.message = f"Attribute {attribute_name} has value {attribute_value} which is not valid"
+        self.attribute_name = attribute_name
+        self.attribute_value = attribute_value
 
     def __str__(self):
         return self.message
