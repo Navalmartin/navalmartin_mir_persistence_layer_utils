@@ -9,10 +9,25 @@ from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.utils.exceptions import ResourceNotFoundException
 
 
-class CreateEntityCRUDAPI(object):
+class CrudEntityBase(object):
+
+    def __init__(self, collection_name: str):
+        self._collection_name = collection_name
+
+    @property
+    def collection_name(self) -> str:
+        if self._collection_name is None or self._collection_name == "":
+            raise ValueError("Collection name is not set")
+        return self._collection_name
+
+
+class CreateEntityCRUDAPI(CrudEntityBase):
     """Create queries in the DB
 
     """
+
+    def __init__(self, collection_name: str):
+        super(CreateEntityCRUDAPI, self).__init__(collection_name)
 
     @staticmethod
     def insert_one(data: dict, db_session: MongoDBSession, collection_name: str):
@@ -36,13 +51,7 @@ class ReadEntityCRUDAPI(object):
     """
 
     def __init__(self, collection_name: str):
-        self._collection_name = collection_name
-
-    @property
-    def collection_name(self) -> str:
-        if self._collection_name is None or self._collection_name == "":
-            raise ValueError("Collection name is not set")
-        return self._collection_name
+        super(ReadEntityCRUDAPI, self).__init__(collection_name)
 
     @staticmethod
     def find(criteria: dict, db_session: MongoDBSession,
@@ -68,6 +77,9 @@ class UpdateEntityCRUDAPI(object):
     """Update queries in the DB
 
     """
+
+    def __init__(self, collection_name: str):
+        super(UpdateEntityCRUDAPI, self).__init__(collection_name)
 
     @staticmethod
     def update_one(criteria: dict, update_data: dict,
@@ -97,6 +109,9 @@ class DeleteEntityCRUDAPI(object):
     """Delete queries in the DB
 
     """
+
+    def __init__(self, collection_name: str):
+        super(DeleteEntityCRUDAPI, self).__init__(collection_name)
 
     @staticmethod
     def delete_one(criteria: dict, db_session: MongoDBSession,
