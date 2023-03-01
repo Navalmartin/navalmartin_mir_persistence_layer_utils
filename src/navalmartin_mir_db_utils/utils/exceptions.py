@@ -63,3 +63,15 @@ class InvalidAttributeValueException(Exception):
 
     def __str__(self):
         return self.message
+
+
+class InvalidMongoDBOperatorException(Exception):
+    def __init__(self, operator: str, extra_message: str = ""):
+        self.message = f"The operator {operator} is an invalid MongoDB operator"
+
+        if extra_message != "" or extra_message is not None:
+            self.message += " " + extra_message
+
+    def __str__(self):
+        return self.message
+

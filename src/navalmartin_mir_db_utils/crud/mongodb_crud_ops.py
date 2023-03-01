@@ -6,7 +6,7 @@ import datetime
 from typing import List
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
-from navalmartin_mir_db_utils.utils.exceptions import ResourceNotFoundException
+from navalmartin_mir_db_utils.utils import InvalidMongoDBOperatorException
 
 
 class CrudEntityBase(object):
@@ -85,18 +85,31 @@ class UpdateEntityCRUDAPI(CrudEntityBase):
     def update_one(criteria: dict, update_data: dict,
                    db_session: MongoDBSession,
                    collection_name: str,
+                   update_op: str = "$set",
                    upsert: bool = False):
+
+        if not update_op.startswith("$"):
+            raise InvalidMongoDBOperatorException(operator=update_op,
+                                                  extra_message="Operator does not start with '$' ")
+
         update_data['updated_at'] = datetime.datetime.utcnow()
-        result = db_session.db[collection_name].update_one(criteria, {"$set": update_data},
+        result = db_session.db[collection_name].update_one(criteria, {update_op: update_data},
                                                            upsert=upsert)
         return result
 
     @staticmethod
     def update_many(criteria: dict, update_data: dict,
-                  db_session: MongoDBSession, collection_name: str,
-                  upsert: bool = False):
+                    db_session: MongoDBSession,
+                    collection_name: str,
+                    update_op: str = "$set",
+                    upsert: bool = False):
+
+        if not update_op.startswith("$"):
+            raise InvalidMongoDBOperatorException(operator=update_op,
+                                                  extra_message="Operator does not start with '$' ")
+
         result = db_session.db[collection_name].update_many(criteria,
-                                                            {"$set": update_data},
+                                                            {update_op: update_data},
                                                             upsert=upsert)
 
         update_data_time = {'updated_at': datetime.datetime.utcnow()}
