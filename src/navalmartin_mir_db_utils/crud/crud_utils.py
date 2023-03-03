@@ -2,7 +2,7 @@ from typing import Any, Callable
 from pymongo.results import InsertOneResult, UpdateResult
 
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
-from navalmartin_mir_db_utils.crud.mongodb_crud_ops import ReadEntityCRUDAPI, CreateEntityCRUDAPI
+from navalmartin_mir_db_utils.crud.mongodb_crud_ops import ReadEntityCRUDAPI, CreateEntityCRUDAPI, UpdateEntityCRUDAPI
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
 from navalmartin_mir_db_utils.utils.exceptions import (ResourceNotFoundException, ResourceNotUpdatedException,
                                                        ResourceExistsException, DBInsertFailedException)
@@ -88,15 +88,16 @@ async def if_resource_found_raise(crud_handler,
 
 
 async def update_one_or_raise(
-        crud_handler: Any,
+        crud_handler: UpdateEntityCRUDAPI,
         criteria: dict,
         db_session,
         update_data: dict,
+        update_op: str = "$set",
         error_message: str = "Error occurred",
 ) -> UpdateResult:
     result: UpdateResult = await crud_handler.update_one(
         criteria=criteria, db_session=db_session, update_data=update_data,
-        collection_name=crud_handler.collection_name
+        collection_name=crud_handler.collection_name, update_op=update_op
     )
 
     if result is None:
