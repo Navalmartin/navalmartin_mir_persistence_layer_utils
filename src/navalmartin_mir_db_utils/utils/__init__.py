@@ -7,4 +7,4 @@ from .exceptions import (InvalidObjectIdException,
                          DBUpdateFailedException,
                          InvalidAttributeValueException,
                          InvalidMongoDBOperatorException)
-from .db_enums import (TaskStateTypeEnum, ErrorTypeEnum)
+from .db_enums import (TaskStateTypeEnum, ErrorTypeEnum, InvalidTypeEnum)
