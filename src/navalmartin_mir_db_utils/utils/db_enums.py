@@ -14,6 +14,7 @@ class TaskStateTypeEnum(Enum):
     IN_PROGRESS = 2
     PENDING = 3
     FINISHED = 4
+    FINISHED_WITH_ERRORS = 5
 
 
 class ErrorTypeEnum(Enum):
