@@ -31,16 +31,16 @@ class CreateEntityCRUDAPI(CrudEntityBase):
 
     @staticmethod
     def insert_one(data: dict, db_session: MongoDBSession, collection_name: str):
-        data['created_at'] = datetime.datetime.utcnow()
-        data['updated_at'] = datetime.datetime.utcnow()
+        data['created_at'] = str(datetime.datetime.utcnow())
+        data['updated_at'] = str(datetime.datetime.utcnow())
         result = db_session.db[collection_name].insert_one(data)
         return result
 
     @staticmethod
     def insert_many(data: List[dict], db_session: MongoDBSession, collection_name: str):
         for item in data:
-            item['created_at'] = datetime.datetime.utcnow()
-            item['updated_at'] = datetime.datetime.utcnow()
+            item['created_at'] = str(datetime.datetime.utcnow())
+            item['updated_at'] = str(datetime.datetime.utcnow())
 
         return db_session.db[collection_name].insert_many(data)
 
@@ -92,7 +92,7 @@ class UpdateEntityCRUDAPI(CrudEntityBase):
             raise InvalidMongoDBOperatorException(operator=update_op,
                                                   extra_message="Operator does not start with '$' ")
 
-        update_data['updated_at'] = datetime.datetime.utcnow()
+        update_data['updated_at'] = str(datetime.datetime.utcnow())
         result = db_session.db[collection_name].update_one(criteria, {update_op: update_data},
                                                            upsert=upsert)
         return result
@@ -112,7 +112,7 @@ class UpdateEntityCRUDAPI(CrudEntityBase):
                                                             {update_op: update_data},
                                                             upsert=upsert)
 
-        update_data_time = {'updated_at': datetime.datetime.utcnow()}
+        update_data_time = {'updated_at': str(datetime.datetime.utcnow())}
         return db_session.db[collection_name].update_many(criteria,
                                                           {"$set": update_data_time},
                                                           upsert=upsert)
