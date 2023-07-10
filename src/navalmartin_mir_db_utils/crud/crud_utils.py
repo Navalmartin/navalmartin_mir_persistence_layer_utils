@@ -36,14 +36,15 @@ async def insert_one_or_fail(crud_handler: CreateEntityCRUDAPI,
                              db_session: MongoDBSession,
                              error_message: str = "Error occurred",
                              schema: Callable = None) -> InsertOneResult:
-    """
+    """Insert one document in the collection that the crud handler
+    manipulates
 
     Parameters
     ----------
     crud_handler: The handler that does the insert
     insert_data: The data to insert
-    db_session: The session used
-    error_message: The error message to show
+    db_session: The active database session
+    error_message: The error message to show if insertion fails
     schema: The schema to validate the data
     Returns
     -------
@@ -108,8 +109,11 @@ async def update_one_or_raise(
         print(f"{DB_ERROR} {error_message}")
         raise ResourceNotUpdatedException(resource_id=str(criteria))
 
+
+    """
     if result.modified_count != 1:
         print(f"{DB_ERROR} {error_message}")
         raise ResourceNotUpdatedException(resource_id=str(criteria))
+    """
 
     return result
