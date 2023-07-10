@@ -72,6 +72,25 @@ class ReadEntityCRUDAPI(CrudEntityBase):
         result = db_session.db[collection_name].count_documents(criteria)
         return result
 
+    @staticmethod
+    def get_distinct(attribute: str, db_session: MongoDBSession,
+                     collection_name: str):
+        """Returns the distinct occurrences of the attribute
+        in the given collection
+
+        Parameters
+        ----------
+        attribute: The attribute name to get the distinct occurrences'
+        db_session: The DB session to use
+        collection_name: The collection name to search
+
+        Returns
+        -------
+
+        """
+        result = db_session.db[collection_name].distinct(attribute)
+        return result
+
 
 class UpdateEntityCRUDAPI(CrudEntityBase):
     """Update queries in the DB
