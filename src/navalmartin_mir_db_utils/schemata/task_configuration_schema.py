@@ -1,14 +1,15 @@
 from pydantic import BaseModel, Field
-from typing import List, Dict, Any
+from typing import Dict
 
 
 class TaskConfigurationSchema(BaseModel):
-    task_input: List[Any] = Field(title="task_input",
+    task_input: Dict = Field(title="task_input",
                                   description="The input for the task",
-                                  default=[])
-    detail: List[Dict] = Field(title="detail",
+                                  default={})
+
+    detail: Dict = Field(title="detail",
                                description="Details pertaining to the task",
-                               default=[])
+                               default={})
 
     task_packages_versions_required: Dict = Field(title="task_packages_versions_required",
                                                   description="Specific packages versions the task requires",
