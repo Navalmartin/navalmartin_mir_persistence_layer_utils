@@ -4,7 +4,6 @@ to be embedded in a task document specified by the client code
 
 """
 
-import datetime
 from pydantic import BaseModel, Field
 
 
@@ -28,8 +27,3 @@ class TaskPerformanceResultSchema(BaseModel):
     gpu_mem_util: float = Field(title='gpu_mem_util',
                                 description="The percentage of the GPU-RAM utilization",
                                 default=0.0)
-    started_at: str = Field(title='started_at', description="Date/time the task started UTC format",
-                            default=datetime.datetime.utcnow())
-    ended_at: str = Field(title='ended_at',
-                          description="Date/time the task ended UTC format",
-                          default=datetime.datetime.utcnow())
