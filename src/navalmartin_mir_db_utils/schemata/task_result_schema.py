@@ -23,9 +23,9 @@ class ErrorType(BaseModel):
 
 
 class TaskResultSchema(BaseModel):
-    errors: List[ErrorType] = Field(title="errors",
+    errors: Dict = Field(title="errors",
                                     description="The errors occurred whilst the task was running",
-                                    default=[])
+                                    default={})
     results: Dict = Field(title="results",
                           description="The results obtained by running the task was running",
                           default={})
