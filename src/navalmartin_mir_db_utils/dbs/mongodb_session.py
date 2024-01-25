@@ -4,7 +4,7 @@
 import os
 
 import motor.motor_asyncio
-from typing import Union
+from typing import Union, Dict, Any
 
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
 
@@ -12,7 +12,7 @@ from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
 class MongoDBSession(object):
 
     @classmethod
-    def build_with_arguments(cls, mongodb_url:str, db_name: str, **kwargs) -> "MongoDBSession":
+    def build_with_arguments(cls, mongodb_url: str, db_name: str, **kwargs) -> "MongoDBSession":
         """Build a MongoDBSession with provided arguments. For a list
         of arguments check https://motor.readthedocs.io/en/stable/api-asyncio/asyncio_motor_client.html
 
@@ -36,11 +36,10 @@ class MongoDBSession(object):
         db_session.db = db_session.client[db_name]
         return db_session
 
-
     def __init__(self, mongodb_url: str = "", db_name: str = "",
                  build_client: bool = True, **kwargs: dict):
-        self.mongodb_url: Union[str | None] = mongodb_url
-        self.db_name: Union[str | None] = db_name
+        self.mongodb_url: Union[str, None] = mongodb_url
+        self.db_name: Union[str, None] = db_name
         self.client = None
         self.db = None
 
@@ -59,13 +58,20 @@ class MongoDBSession(object):
                 print(f"{DB_ERROR} The DB name is None or empty. Check your configuration")
                 raise ValueError("DB name is not set")
 
-
             self.client = motor.motor_asyncio.AsyncIOMotorClient(self.mongodb_url, **kwargs)
             self.db = self.client[self.db_name]
 
     async def drop_database(self) -> None:
+        """Drop the database that the underlying client is using
+        """
         await self.client.drop_database(self.db_name)
 
+    async def get_server_info(self) -> Dict[str, Any]:
+        """Returns the DB server information the client
+        is connected to
+        """
+        info = await self.client.server_info()
+        return info
 
 
 def get_db_session() -> MongoDBSession:
@@ -84,5 +90,3 @@ def get_db_session_with_config(config: dict) -> MongoDBSession:
     mongodb_url = config['MONGODB_URL']
     db_name = config['MONGODB_NAME']
     return MongoDBSession(mongodb_url=mongodb_url, db_name=db_name)
-
-
