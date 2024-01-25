@@ -38,14 +38,15 @@ pip uninstall navalmartin-mir-db-utils
 
 You can check which specific version you have installed by
 
-```
+```python
 import navalmartin_mir_db_utils
 print(navalmartin_mir_db_utils.__version__)
 ```
 
 ### Create a session
 
-```
+```python
+import asyncio
 from dotenv import load_dotenv
 from navalmartin_mir_db_utils.dbs import MongoDBSession 
 
@@ -59,12 +60,16 @@ load_dotenv()
 # so we need to set it manuall
 session = MongoDBSession(db_name="my-db-name")
 
+# get the server info: Dict[str, Any]
+server_info = asyncio.run(db_session.get_server_info())
+print(f"Server info {server_info}")
+
 ```
 ### Execute simple queries
 
 You can use the session to execute simple queries as shown below
 
-```
+```python
 import asyncio
 import bson
 from navalmartin_mir_db_utils.dbs.mongodb_session import MongoDBSession
@@ -140,7 +145,7 @@ if __name__ == '__main__':
 
 ### Simple models
 
-```
+```python
 import datetime
 from navalmartin_mir_db_utils.schemata import IndexedItemDataViewBase, UserDataViewBase
 
@@ -179,7 +184,7 @@ if __name__ == '__main__':
 
 You can also run transactions.
 
-```
+```python
 from typing import Any
 import bson
 from pymongo.read_concern import ReadConcern
@@ -244,7 +249,7 @@ if __name__ == '__main__':
 
 There is also a decorator available to run a transaction
 
-```
+```python
 from typing import Any
 import bson
 from pymongo.read_concern import ReadConcern
@@ -316,7 +321,7 @@ if __name__ == '__main__':
 
 Some utilities exist to monitor a task
 
-```
+```python
 import time
 import psutil
 import datetime
