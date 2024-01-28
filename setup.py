@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='navalmartin_mir_db_utils',
     packages=['navalmartin_mir_db_utils'],
-    version='0.0.43',
+    version='0.0.44',
     description='Various utilities for working with AWS in Python 3.',
     author='Alexandros Giavaras',
     author_email='a.giavaras@gmail.com',
