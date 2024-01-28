@@ -2,9 +2,10 @@
 
 """
 import os
-
+import datetime
 import motor.motor_asyncio
-from typing import Union, Dict, Any
+from pymongo.errors import ConnectionFailure
+from typing import Union, Dict, Any, Tuple
 
 from navalmartin_mir_db_utils.dbs.dbs_utils import DB_ERROR
 
@@ -58,8 +59,44 @@ class MongoDBSession(object):
                 print(f"{DB_ERROR} The DB name is None or empty. Check your configuration")
                 raise ValueError("DB name is not set")
 
-            self.client = motor.motor_asyncio.AsyncIOMotorClient(self.mongodb_url, **kwargs)
+            self.client: motor.motor_asyncio.AsyncIOMotorClient = motor.motor_asyncio.AsyncIOMotorClient(self.mongodb_url, **kwargs)
+
+            # getting a reference to a database
+            # does no I/O and does not require an await expression.
+            # see: https://motor.readthedocs.io/en/stable/tutorial-asyncio.html
             self.db = self.client[self.db_name]
+
+    def ping(self):
+        try:
+            # The ping command is cheap and does not require auth.
+            self.client.admin.command('ping')
+        except ConnectionFailure:
+            print("Server not available")
+
+    def close(self) -> None:
+        """Closes the connection with the DB.
+        See https://motor.readthedocs.io/en/stable/api-asyncio/asyncio_motor_client.html
+        Cleanup client resources and disconnect from MongoDB.
+
+        End all server sessions created by this client by sending one or more endSessions commands.
+
+        Close all sockets in the connection pools and stop the monitor threads.
+
+        """
+        var = self.client.close
+
+    def address(self) -> Tuple:
+        """Returns (host, port) of the current standalone, primary, or mongos, or None.
+        Accessing address raises InvalidOperation if
+        the client is load-balancing among mongoses, since
+        there is no single address. Use nodes instead.
+
+        If the client is not connected, this will block until a
+        connection is established or
+        raise ServerSelectionTimeoutError if no server is available.
+
+        """
+        return self.client.address
 
     async def drop_database(self) -> None:
         """Drop the database that the underlying client is using
@@ -72,6 +109,20 @@ class MongoDBSession(object):
         """
         info = await self.client.server_info()
         return info
+
+    async def insert_one(self, data: Dict, collection_name: str):
+        data['created_at'] = datetime.datetime.utcnow()
+        data['updated_at'] = datetime.datetime.utcnow()
+        result = await self.db[collection_name].insert_one(data)
+        return result
+
+    async def find_one(self, criteria: Dict, projection: dict, collection_name: str):
+        result = await self.db[collection_name].find_one(criteria, projection=projection)
+        return result
+
+    def find(self, criteria: Dict, projection: Dict, collection_name: str):
+        result = self.db[collection_name].find(criteria, projection=projection)
+        return result
 
 
 def get_db_session() -> MongoDBSession:
